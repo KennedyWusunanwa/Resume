@@ -98,7 +98,7 @@ const SectionHeader = ({ icon: Icon, title, subtitle }) => (
 // --- Main App Component ---
 
 export default function App() {
-  const typingText = useTypingEffect("> Web Developer, Founder & Tech Enthusiast_", 50);
+  const typingText = useTypingEffect("> Full Stack Developer, Entrepreneur, Marketier, Innovationist_", 50);
   const [isDark, setIsDark] = useState(true);
 
   // Data Arrays
@@ -108,8 +108,8 @@ export default function App() {
       role: "Web Developer / Marketing / Designer",
       date: "Aug 2025 - Present",
       location: "Hybrid",
-      description: "Driving technological development, strategy, marketing initiatives, and design implementations.",
-      tags: ["Web Dev", "Marketing", "Design"]
+      description: "Building web and app products across the PanAvest ecosystem, while driving strategy, marketing initiatives, and design implementations.",
+      tags: ["Web Apps", "Mobile Apps", "Design"]
     },
     {
       company: "MYO Global Organization",
@@ -145,7 +145,7 @@ export default function App() {
     },
     {
       company: "Leti Arts",
-      role: "Web Developer",
+      role: "Lead Web Manager",
       date: "Jan 2023 - Present",
       location: "Greater Accra, Ghana (Hybrid)",
       description: "Overseeing web architecture and digital presence for a premier African game development studio.",
@@ -240,6 +240,34 @@ export default function App() {
       courses: "Cloud Architecture, AWS Services"
     },
     {
+      institution: "SkillFront",
+      degree: "ISO 9001 Quality Management Systems Associate",
+      date: "Issued Mar 2026",
+      details: "Public credential listed on LinkedIn covering quality management systems and process standards.",
+      courses: "Quality Management Systems, Process Standards"
+    },
+    {
+      institution: "Internet Society",
+      degree: "Member",
+      date: "Issued Mar 2026",
+      details: "Active professional membership listed on LinkedIn.",
+      courses: "Internet Governance, Digital Community"
+    },
+    {
+      institution: "Institute of ICT Professionals, Ghana (IIPGH)",
+      degree: "Professional Member",
+      date: "Issued Mar 2026",
+      details: "Professional ICT membership listed on LinkedIn.",
+      courses: "ICT Practice, Professional Development"
+    },
+    {
+      institution: "International Association of Engineers (IAENG)",
+      degree: "Member",
+      date: "Issued Jan 2026",
+      details: "Engineering membership listed on LinkedIn.",
+      courses: "Engineering Network, Professional Community"
+    },
+    {
       institution: "Oda Senior High School",
       degree: "General Arts",
       date: "Completed 2019",
@@ -250,7 +278,8 @@ export default function App() {
 
   const projects = [
     { name: "Hayame", link: "https://www.hayamegh.com", status: "Live", desc: "Online car rental, sale, and logistics service platform." },
-    { name: "Panavest KDS", link: "https://panavestkds.com", status: "Live", desc: "Kitchen Display System and operational platform for Panavest." },
+    { name: "PanAvest KDS Web", link: "https://panavestkds.com", status: "Live", desc: "Web learning platform for courses, assessments, e-books, and verifiable certificates." },
+    { name: "PanAvest KDS iOS App", link: "https://apps.apple.com/us/app/panavest-kds/id6755534884", status: "Live", desc: "Mobile iOS version of PanAvest KDS, published on the App Store and built with React and Capacitor." },
     { name: "Jano Hospital", link: "https://www.janoms.com", status: "Live", desc: "Medical management system and digital front door for Jano Hospital." },
     { name: "Gida Ruddy", link: "https://gida-ruddy.vercel.app/", status: "In Dev", desc: "Personal project pushing modern front-end boundaries." },
     { name: "CEM New York", link: "https://cemnewyork.com/", status: "Live", desc: "Robust web architecture for Charismatic Evangelistic Ministry NY." },
@@ -352,6 +381,35 @@ export default function App() {
             border: 1px solid rgba(148, 163, 184, 0.15);
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.55);
           }
+          .credential-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.7rem 1.15rem;
+            border-radius: 9999px;
+            border: 1px solid rgba(8, 145, 178, 0.28);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(236, 253, 245, 0.92));
+            color: #0f172a;
+            font-family: 'Fira Code', 'Courier New', Courier, monospace;
+            font-size: 0.92rem;
+            font-weight: 700;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(34, 211, 238, 0.12);
+            box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.45), 0 0 28px rgba(6, 182, 212, 0.18);
+            backdrop-filter: blur(14px);
+          }
+          .dark .credential-badge {
+            border-color: rgba(52, 211, 153, 0.58);
+            background: linear-gradient(135deg, rgba(7, 18, 32, 0.96), rgba(11, 31, 44, 0.92));
+            color: #ecfeff;
+            text-shadow: 0 0 14px rgba(167, 243, 208, 0.34);
+            box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.22), 0 0 32px rgba(16, 185, 129, 0.24), 0 14px 30px rgba(2, 6, 23, 0.45);
+          }
+          @media (min-width: 768px) {
+            .credential-badge {
+              font-size: 1rem;
+            }
+          }
           .code-text { font-family: 'Fira Code', 'Courier New', Courier, monospace; }
         `}} />
 
@@ -366,40 +424,47 @@ export default function App() {
         <div className="relative z-10 max-w-6xl mx-auto px-4 md:px-8 py-12 md:py-20">
           
           {/* --- Hero Section --- */}
-          <section className="min-h-[75vh] flex flex-col justify-center mb-16 md:mb-24 pt-10">
+          <section className="relative min-h-[75vh] flex flex-col justify-center mb-16 md:mb-24 pt-10 overflow-hidden">
             <RevealWrapper>
-              <div className="inline-block px-4 py-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-mono text-xs md:text-sm mb-6">
-                System.out.println("Hello, World!");
-              </div>
-              <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter text-slate-900 dark:text-white mb-4 md:mb-6 leading-tight">
-                Kennedy <br/>
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 via-cyan-500 to-indigo-500 dark:from-emerald-400 dark:via-cyan-400 dark:to-indigo-400">
-                  Wusunanwa
-                </span>
-              </h1>
-              <div className="h-16 md:h-10 mb-6">
-                <p className="text-lg md:text-2xl font-mono text-slate-600 dark:text-gray-400 code-text">
-                  <span className="text-emerald-600 dark:text-emerald-400">{typingText}</span>
-                  <span className="animate-pulse text-slate-900 dark:text-white">|</span>
-                </p>
-              </div>
-              
-              {/* Social Links */}
-              <div className="flex flex-wrap gap-4 mb-8">
-                {socialLinks.map((social, idx) => (
-                  <a key={idx} href={social.url} target="_blank" rel="noopener noreferrer" className="p-2 md:p-3 rounded-full glass-panel hover:text-emerald-500 hover:border-emerald-500/50 transition-all group">
-                    <social.icon size={20} className="group-hover:scale-110 transition-transform" />
+              <div className="relative z-10">
+                <div className="inline-block px-4 py-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-mono text-xs md:text-sm mb-6">
+                  System.out.println("Hello, World!");
+                </div>
+                <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter text-slate-900 dark:text-white mb-4 md:mb-6 leading-tight">
+                  Kennedy <br/>
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 via-cyan-500 to-indigo-500 dark:from-emerald-400 dark:via-cyan-400 dark:to-indigo-400">
+                    (Wusunanwa) Abubakar
+                  </span>
+                </h1>
+                <div className="mb-6">
+                  <span className="credential-badge">
+                    BSc IT, MIIPGH, MIAENG
+                  </span>
+                </div>
+                <div className="h-16 md:h-10 mb-6">
+                  <p className="text-lg md:text-2xl font-mono text-slate-600 dark:text-gray-400 code-text">
+                    <span className="text-emerald-600 dark:text-emerald-400">{typingText}</span>
+                    <span className="animate-pulse text-slate-900 dark:text-white">|</span>
+                  </p>
+                </div>
+                
+                {/* Social Links */}
+                <div className="flex flex-wrap gap-4 mb-8">
+                  {socialLinks.map((social, idx) => (
+                    <a key={idx} href={social.url} target="_blank" rel="noopener noreferrer" className="p-2 md:p-3 rounded-full glass-panel hover:text-emerald-500 hover:border-emerald-500/50 transition-all group">
+                      <social.icon size={20} className="group-hover:scale-110 transition-transform" />
+                    </a>
+                  ))}
+                </div>
+                
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <a href="#projects" className="px-6 py-3 rounded-lg bg-emerald-500 text-white dark:text-black font-bold hover:bg-emerald-400 shadow-lg hover:shadow-emerald-500/25 transition-all flex justify-center items-center gap-2">
+                    <Code2 size={20} /> View Deployments
                   </a>
-                ))}
-              </div>
-              
-              <div className="flex flex-col sm:flex-row gap-4">
-                <a href="#projects" className="px-6 py-3 rounded-lg bg-emerald-500 text-white dark:text-black font-bold hover:bg-emerald-400 shadow-lg hover:shadow-emerald-500/25 transition-all flex justify-center items-center gap-2">
-                  <Code2 size={20} /> View Deployments
-                </a>
-                <a href="mailto:kennedyabu85@gmail.com" className="px-6 py-3 rounded-lg border border-slate-300 dark:border-gray-700 hover:border-emerald-500 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors flex justify-center items-center gap-2 bg-white/50 dark:bg-transparent">
-                  <Mail size={20} /> Contact.exe
-                </a>
+                  <a href="mailto:kennedyabu85@gmail.com" className="px-6 py-3 rounded-lg border border-slate-300 dark:border-gray-700 hover:border-emerald-500 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors flex justify-center items-center gap-2 bg-white/50 dark:bg-transparent">
+                    <Mail size={20} /> Contact.exe
+                  </a>
+                </div>
               </div>
             </RevealWrapper>
           </section>
@@ -427,25 +492,30 @@ export default function App() {
                     <p><span className="text-fuchsia-400">const</span> <span className="text-blue-400">developer</span> <span className="text-cyan-400">=</span> <span className="text-yellow-300">{`{`}</span></p>
                     
                     <div className="pl-4 md:pl-8">
-                      <p><span className="text-cyan-200">name</span>: <span className="text-emerald-400">"Kennedy Abubakar Wusunanwa"</span>,</p>
+                      <p><span className="text-cyan-200">name</span>: <span className="text-emerald-400">"Kennedy (Wusunanwa) Abubakar"</span>,</p>
+                      <p><span className="text-cyan-200">credentials</span>: <span className="text-emerald-400">"BSc IT, MIIPGH, MIAENG"</span>,</p>
+                      <p><span className="text-cyan-200">headline</span>: <span className="text-emerald-400">"Full stack developer, entrepreneur, marketier, innovationist"</span>,</p>
                       <p><span className="text-cyan-200">nationality</span>: <span className="text-emerald-400">"Ghanaian"</span>,</p>
                       <p><span className="text-cyan-200">contact</span>: <span className="text-yellow-300">{`{`}</span></p>
                       <div className="pl-4 md:pl-8">
                         <p><span className="text-cyan-200">email</span>: <span className="text-emerald-400">"kennedyabu85@gmail.com"</span>,</p>
                         <p><span className="text-cyan-200">phone</span>: <span className="text-emerald-400">"+233 20 233 7612"</span>,</p>
-                        <p><span className="text-cyan-200">location</span>: <span className="text-emerald-400">"Adenta Housing Down, Accra"</span></p>
+                        <p><span className="text-cyan-200">location</span>: <span className="text-emerald-400">"Accra, Greater Accra Region, Ghana"</span></p>
                       </div>
                       <p><span className="text-yellow-300">{`}`}</span>,</p>
                       <p><span className="text-cyan-200">skills</span>: <span className="text-purple-400">[</span></p>
                       <div className="pl-4 md:pl-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-4">
-                        <p><span className="text-emerald-400">"Front-End Web Dev"</span>,</p>
+                        <p><span className="text-emerald-400">"Front-End Web Development"</span>,</p>
+                        <p><span className="text-emerald-400">"Mobile App Development"</span>,</p>
+                        <p><span className="text-emerald-400">"Desktop App Development"</span>,</p>
                         <p><span className="text-emerald-400">"Digital Strategy"</span>,</p>
-                        <p><span className="text-emerald-400">"SQL & AWS Management"</span>,</p>
+                        <p><span className="text-emerald-400">"Cross-Platform Development"</span>,</p>
                         <p><span className="text-emerald-400">"WordPress Development"</span>,</p>
-                        <p><span className="text-emerald-400">"Marketing & Design"</span>,</p>
-                        <p><span className="text-emerald-400">"Critical Decision-Making"</span></p>
+                        <p><span className="text-emerald-400">"Graphic Design"</span>,</p>
+                        <p><span className="text-emerald-400">"Entrepreneurship"</span></p>
                       </div>
                       <p><span className="text-purple-400">]</span>,</p>
+                      <p><span className="text-cyan-200">memberships</span>: <span className="text-purple-400">[</span><span className="text-emerald-400">"IAENG"</span>, <span className="text-emerald-400">"Internet Society"</span>, <span className="text-emerald-400">"IIPGH"</span><span className="text-purple-400">]</span>,</p>
                       <p><span className="text-cyan-200">hobbies</span>: <span className="text-purple-400">[</span><span className="text-emerald-400">"Fitness"</span>, <span className="text-emerald-400">"Car Customization"</span>, <span className="text-emerald-400">"Tech"</span><span className="text-purple-400">]</span></p>
                     </div>
                     
@@ -578,7 +648,7 @@ export default function App() {
           {/* --- Footer --- */}
           <footer className="border-t border-slate-300 dark:border-gray-800 py-8 md:py-12 text-center font-mono text-xs md:text-sm text-slate-500 dark:text-gray-500 relative z-10">
             <RevealWrapper>
-              <p className="mb-4 text-slate-600 dark:text-gray-400">System.exit(0); // Developed by Kennedy Wusunanwa</p>
+              <p className="mb-4 text-slate-600 dark:text-gray-400">System.exit(0); // Developed by Kennedy (Wusunanwa) Abubakar</p>
               
               <div className="flex flex-wrap justify-center gap-4 md:gap-6 mb-4">
                 {socialLinks.map((social, idx) => (
