@@ -1,19 +1,14 @@
-<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="fbg" x1="16" y1="16" x2="240" y2="240" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#062325" />
-      <stop offset="0.5" stop-color="#0F2A3D" />
-      <stop offset="1" stop-color="#1B2555" />
-    </linearGradient>
-    <linearGradient id="ftext" x1="60" y1="70" x2="192" y2="186" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#34D399" />
-      <stop offset="0.5" stop-color="#22D3EE" />
-      <stop offset="1" stop-color="#A78BFA" />
-    </linearGradient>
-  </defs>
-  <rect x="16" y="16" width="224" height="224" rx="52" fill="url(#fbg)" />
-  <rect x="16.5" y="16.5" width="223" height="223" rx="51.5" stroke="#94A3B8" stroke-opacity="0.32" />
-  <text x="51" y="164" fill="url(#ftext)" font-family="'Segoe UI', Arial, sans-serif" font-size="106" font-weight="800" letter-spacing="-3">
-    KW
-  </text>
+<svg width="256" height="256" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+  <rect width="256" height="256" rx="56" fill="#14110d"/>
+  <text
+    x="128"
+    y="178"
+    text-anchor="middle"
+    fill="#f6f4ec"
+    font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter Tight', Helvetica, Arial, sans-serif"
+    font-size="176"
+    font-weight="600"
+    letter-spacing="-6"
+  >k</text>
+  <circle cx="178" cy="178" r="14" fill="#059669"/>
 </svg>
