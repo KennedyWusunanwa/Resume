@@ -92,22 +92,22 @@ function Reveal({ children, delay = 0, className = '' }) {
 const featured = [
   {
     n: '01',
+    name: 'SCMpedia',
+    role: 'Reference · Knowledge platform',
+    tagline:
+      'A launched supply-chain encyclopedia at scmpedia.org — structured for students, professionals, and the curious.',
+    href: 'https://www.scmpedia.org/',
+    stack: ['Reference', 'Knowledge', 'Web'],
+    year: '2026',
+  },
+  {
+    n: '02',
     name: 'HumanClarity AI',
     role: 'AI tool · Consumer SaaS',
     tagline:
       'Turn AI-written text into undetectable, human-sounding content. Bypasses Turnitin, GPTZero, Originality.ai and the rest — instantly.',
     href: 'https://www.humanclarityai.com/',
     stack: ['AI', 'SaaS', 'Web'],
-    year: '2026',
-  },
-  {
-    n: '02',
-    name: 'SCMpedia',
-    role: 'Reference · Knowledge platform',
-    tagline:
-      'An encyclopedic reference for the supply-chain discipline — structured for students, professionals, and the curious.',
-    href: 'https://scmpedia.vercel.app/',
-    stack: ['Reference', 'Knowledge', 'Web'],
     year: '2026',
   },
   {
