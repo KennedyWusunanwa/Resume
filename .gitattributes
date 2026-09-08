@@ -1,0 +1,4 @@
+# A vCard's CRLF line endings are required by RFC 2426, not a Windows accident.
+# Without this, Git normalises them to LF on commit and several importers then
+# reject the file outright ("Invalid Contact Data" on iOS).
+*.vcf -text

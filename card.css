@@ -1,0 +1,239 @@
+/* Styles that only the contact card needs. The shared design system lives in
+   styles.css; this file adds the few pieces that would be dead weight on the
+   portfolio, and corrects three places where styles.css would otherwise win.
+
+   Load order matters and is relied on here: card-main.jsx imports styles.css
+   first and this file second, so at equal specificity these rules win. That is
+   the whole reason the overrides below need no `!important`. */
+
+/* ---- cascade corrections -------------------------------------------------
+
+   styles.css declares .btn, .eyebrow and friends AFTER `@tailwind utilities`,
+   so a Tailwind utility of equal specificity loses to them. Utilities like
+   `text-[1.02rem]` or `normal-case` are therefore inert on those elements, and
+   the fix is a class here rather than `!` at every call site. */
+
+/* .btn pins font-size to 0.92rem; the save button wants to be bigger than that. */
+.save-btn {
+  font-size: 1.02rem;
+  height: 3.5rem;
+}
+
+/* .eyebrow forces uppercase and 0.18em tracking. These lines are sentences, not
+   labels, and should read as an aside rather than a shout. */
+.whisper {
+  text-transform: none;
+  letter-spacing: 0.01em;
+}
+
+/* .eyebrow paints --ink-mute, which is 3.2:1 on cream. Fine for decoration, not
+   for the six labels that tell you which number you are about to call — and this
+   page gets read outdoors. --ink-soft is 8.3:1. */
+.key {
+  color: var(--ink-soft);
+}
+
+/* .portrait img is (0,1,1) and beats any Tailwind sizing utility. Both the box
+   and portrait-card.jpg are square so this is belt-and-braces, but it keeps the
+   frame honest if either ever changes. */
+.portrait img {
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 20%;
+}
+
+/* svh is iOS 15.4+ / Chrome 108+. Declared alone it is simply dropped by older
+   engines and the whole vertical budget collapses to auto, so the vh pair is not
+   optional — this page is opened on whatever phone the stranger happens to own. */
+/* Scoped in CSS rather than with a `md:` prefix: Tailwind variants only apply
+   to utilities it generates, so `md:screen` would silently produce nothing. */
+@media (max-width: 767.98px) {
+  .screen {
+    min-height: 100vh;
+    min-height: 100svh;
+  }
+}
+@media (min-width: 768px) {
+  .screen-md {
+    min-height: 100vh;
+    min-height: 100svh;
+  }
+}
+
+/* ---- touch behaviour ------------------------------------------------------ */
+
+/* styles.css has no hover guard. On a touch screen :hover latches after a tap,
+   so without this the ledger card stays lifted and the save button stays emerald
+   for as long as the page is open. */
+@media (hover: none) {
+  .card:hover {
+    transform: none;
+    box-shadow: none;
+    border-color: var(--line);
+  }
+  .btn-primary:hover {
+    background: var(--ink);
+  }
+  .link:hover::after {
+    transform: scaleX(0);
+  }
+}
+
+.btn,
+.tap-target,
+.tap-icon {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn-primary:active {
+  background: var(--emerald);
+}
+
+/* ---- the plate ------------------------------------------------------------ */
+
+/* A .card that has stopped being a link. On desktop the whole page sits inside
+   one of these, so it must not lift or shadow-shift on hover. */
+@media (min-width: 768px) {
+  .plate-md {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 26px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03), 0 24px 60px -30px rgba(0, 0, 0, 0.18);
+  }
+}
+
+/* ---- contact rows --------------------------------------------------------- */
+
+/* The whole left region is one target; the trailing buttons are siblings, never
+   children, so interactive elements are never nested. */
+.tap-row {
+  border-bottom: 1px solid var(--line);
+}
+.tap-row:last-child {
+  border-bottom: 0;
+}
+
+.tap-target {
+  border-radius: 14px;
+  transition: background 0.25s ease;
+}
+.tap-target:active {
+  background: var(--emerald-tint);
+}
+@media (hover: hover) {
+  .tap-target:hover {
+    background: rgba(20, 17, 13, 0.03);
+  }
+}
+
+/* 44px is the floor Apple and Google both publish, and this page is used
+   one-handed in bad light, so it is a floor worth keeping. */
+.tap-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  color: var(--ink-soft);
+  background: transparent;
+  cursor: pointer;
+  transition: border-color 0.25s ease, color 0.25s ease, background 0.25s ease;
+}
+.tap-icon:active {
+  background: var(--emerald-tint);
+  border-color: var(--emerald);
+  color: var(--emerald);
+}
+@media (hover: hover) {
+  .tap-icon:hover {
+    border-color: var(--line-strong);
+    color: var(--ink);
+  }
+}
+
+/* ---- overlays ------------------------------------------------------------- */
+
+/* The dock carries a second copy of the save button and is up by default,
+   standing down only while the inline one is actually on screen. That ordering
+   matters: if it appeared only after scrolling, then any phone where the first
+   screen's height budget fails — old WebView with no svh, landscape, a large
+   accessibility font — would paint with no save button at all.
+
+   0.94 alpha rather than blur alone, because plenty of mid-range Androids ignore
+   backdrop-filter and would otherwise show the page through it. */
+.dock {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 50;
+  background: rgba(246, 244, 236, 0.94);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-top: 1px solid var(--line);
+  padding: 0.75rem 1rem calc(0.75rem + env(safe-area-inset-bottom));
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease;
+}
+.dock.is-down {
+  transform: translateY(110%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Sits above the dock so it is never under the thumb that just triggered it. */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(env(safe-area-inset-bottom) + 6.5rem);
+  transform: translate(-50%, 8px);
+  z-index: 60;
+  background: var(--ink);
+  color: var(--bg);
+  font-size: 0.8125rem;
+  padding: 0.6rem 1.05rem;
+  border-radius: 999px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
+}
+.toast.is-up {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+/* Android Chrome pulls the .vcf into Downloads with no visible sign, and iOS
+   shows a preview sheet whose "Create New Contact" action sits below the fold.
+   Either way the tap can feel like nothing happened, so the button says
+   otherwise. */
+.btn-saved {
+  background: var(--emerald);
+}
+@media (hover: hover) {
+  .btn-saved:hover {
+    background: var(--emerald);
+  }
+}
+
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(4px); }
+}
+.bob {
+  animation: bob 2.6s ease-in-out infinite;
+}
+
+/* styles.css has no reduced-motion block at all, and of every page on this site
+   the contact card is the one most likely to be opened in a moving car. */
+@media (prefers-reduced-motion: reduce) {
+  .bob { animation: none; }
+  .dot::after { animation: none; }
+  .split-word > span { animation: none; transform: none; }
+  .dock,
+  .toast,
+  .tap-target,
+  .tap-icon { transition: none; }
+}
