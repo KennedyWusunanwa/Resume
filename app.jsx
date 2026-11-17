@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 import { Reveal, ScrollProgress, useActiveSection, useHashScroll } from './reveal.jsx';
 import { summitTiles, teaser } from './scrapbook-data.js';
-import { institutions, media } from './partners-data.js';
+import { institutions, media, technology } from './partners-data.js';
 
 // ---------- Hooks ----------
 
@@ -878,7 +878,8 @@ export default function App() {
               <Reveal delay={120}>
                 <p className="text-[var(--ink-soft)] text-base md:text-lg leading-relaxed">
                   Regulators, professional bodies, chambers of commerce, continental
-                  institutions and media houses — {institutions.length + media.length} in all.
+                  institutions, media houses and technology brands —{' '}
+                  {institutions.length + media.length + technology.length} in all.
                 </p>
               </Reveal>
             </div>
@@ -900,6 +901,15 @@ export default function App() {
             </div>
             <LogoWall items={media} className="logo-wall-media" />
             <p className="logo-names">{names(media)}</p>
+          </Reveal>
+
+          <Reveal>
+            <div className="logo-group-head mt-14">
+              <h3 className="eyebrow">Technology · Transsion group</h3>
+              <span className="eyebrow">{String(technology.length).padStart(2, '0')}</span>
+            </div>
+            <LogoWall items={technology} className="logo-wall-media" />
+            <p className="logo-names">{names(technology)}</p>
           </Reveal>
         </section>
 

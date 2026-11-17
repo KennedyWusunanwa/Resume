@@ -1,5 +1,5 @@
-// Institutions I have worked with: 28 institutions and partners, and 7 media
-// houses.
+// Institutions I have worked with: institutions and partners, media houses,
+// and Transsion Holdings with three of its brands.
 //
 // Each logo in public/partners/ is not a picture but an alpha mask: a WebP whose
 // only information is how opaque each pixel is. The page paints one flat colour
@@ -48,4 +48,11 @@ export const media = [
   { slug: 'ghone-tv', name: 'GHOne TV', r: 1.676 },
   { slug: 'business24', name: 'Business24', r: 1.088 },
   { slug: 'investment-times', name: 'Investment Times', r: 3.205 },
+];
+
+export const technology = [
+  { slug: 'transsion-holdings', name: 'Transsion Holdings', r: 6.275 },
+  { slug: 'infinix', name: 'Infinix', r: 4.571 },
+  { slug: 'itel', name: 'itel', r: 1.582 },
+  { slug: 'oraimo', name: 'oraimo', r: 3.299 },
 ];
