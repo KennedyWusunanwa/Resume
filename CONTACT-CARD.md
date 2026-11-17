@@ -22,7 +22,7 @@ QR is the door; everything else is a lock on the windows.
 | `public/c/kwavir462gj/kennedy-abubakar.vcf` | The file the button downloads (generated) |
 | `scripts/build-vcard.mjs` | Builds that file — `npm run vcard` |
 | `scripts/vcard-photo.jpg` | 400×400 source for the photo embedded in the vCard |
-| `public/portrait-card.jpg` | 800×800, 78 KB. **Never** reference `portrait.png` here — it is 1.1 MB |
+| `public/portrait-card.jpg` | 800×800, 78 KB. **Never** reference the portfolio's `portrait.webp` here — it is several times heavier |
 | `print/` | Print-ready QR artwork, not served |
 | `vercel.json` | The headers that make the whole thing work |
 

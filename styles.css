@@ -231,6 +231,15 @@ body {
   pointer-events: none;
 }
 
+/* Soft emerald halo behind the portrait (the contact card page uses it) */
+.portrait-halo {
+  position: absolute;
+  inset: -8%;
+  background: radial-gradient(50% 50% at 50% 60%, rgba(4, 120, 87, 0.18), transparent 70%);
+  filter: blur(40px);
+  z-index: -1;
+}
+
 /* Project row */
 .row {
   display: grid;

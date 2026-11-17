@@ -427,7 +427,7 @@ export default function App() {
                 <span className="orb orb-a" aria-hidden="true" />
                 <span className="orb orb-b" aria-hidden="true" />
                 <div className="portrait portrait-arch">
-                  <img src="/portrait.png" alt="Kennedy Abubakar" />
+                  <img src="/portrait.webp" width="1086" height="1448" alt="Kennedy Abubakar" />
                 </div>
               </div>
             </Reveal>
