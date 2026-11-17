@@ -1,27 +1,16 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { ArrowUpRight, Mail, Linkedin, Instagram, Facebook } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import {
+  ArrowUpRight,
+  Download,
+  Mail,
+  Linkedin,
+  Instagram,
+  Facebook,
+} from 'lucide-react';
+import { Reveal, ScrollProgress, useActiveSection, useHashScroll } from './reveal.jsx';
+import { summitTiles, teaser } from './scrapbook-data.js';
 
 // ---------- Hooks ----------
-
-function useReveal() {
-  const ref = useRef(null);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          el.classList.add('is-visible');
-          io.unobserve(el);
-        }
-      },
-      { threshold: 0.1 }
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
-  return ref;
-}
 
 function useAccraTime() {
   const [now, setNow] = useState(() => new Date());
@@ -38,60 +27,56 @@ function useAccraTime() {
   return time;
 }
 
-function useActiveSection(ids) {
-  const [active, setActive] = useState(ids[0]);
-  useEffect(() => {
-    const handler = () => {
-      let current = ids[0];
-      for (const id of ids) {
-        const el = document.getElementById(id);
-        if (!el) continue;
-        const rect = el.getBoundingClientRect();
-        if (rect.top <= window.innerHeight * 0.35) current = id;
-      }
-      setActive(current);
-    };
-    handler();
-    window.addEventListener('scroll', handler, { passive: true });
-    return () => window.removeEventListener('scroll', handler);
-  }, [ids]);
-  return active;
-}
-
-function ScrollProgress() {
-  const ref = useRef(null);
-  useEffect(() => {
-    const onScroll = () => {
-      const h = document.documentElement;
-      const max = h.scrollHeight - h.clientHeight;
-      const p = max > 0 ? h.scrollTop / max : 0;
-      if (ref.current) ref.current.style.width = `${p * 100}%`;
-    };
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
-  return <div ref={ref} className="scroll-progress" />;
-}
-
-function Reveal({ children, delay = 0, className = '' }) {
-  const ref = useReveal();
-  return (
-    <div
-      ref={ref}
-      className={`reveal ${className}`}
-      style={{ transitionDelay: `${delay}ms` }}
-    >
-      {children}
-    </div>
-  );
-}
-
 // ---------- Data ----------
+
+const stats = [
+  { value: '15+', label: 'Shipped products' },
+  { value: '2', label: 'Apps on the App Store' },
+  { value: '3', label: 'Continents' },
+  { value: '44 ft', label: 'Widest thing I’ve designed' },
+];
+
+// What I led at the Boardroom Governance Summit 2026.
+const summit = [
+  {
+    title: 'Branding & print',
+    body: 'Event branding and print, from the stage backdrop to the delegate brochure.',
+  },
+  {
+    title: 'Screens',
+    body: 'Speaker and panel screens, and the digital pull-up content.',
+  },
+  {
+    title: 'Social & web',
+    body: 'Social media and the summit website.',
+  },
+  {
+    title: 'Coordination',
+    body: 'Event coordination with the printers, the AV team and the organisers.',
+  },
+];
+
+const hayame = {
+  appStore: 'https://apps.apple.com/gh/app/hayame/id6760410961',
+  apk: 'https://www.hayamegh.com/downloads/hayame-android.apk',
+  site: 'https://www.hayamegh.com',
+  shots: [
+    ['02-find-your-next-ride', 'Find your next ride'],
+    ['03-book-in-minutes', 'Book in minutes'],
+    ['04-pay-safely', 'Pay safely in the app'],
+    ['05-every-trip-on-track', 'Every trip, on track'],
+    ['06-chat-with-your-host', 'Chat with your host'],
+    ['07-your-car-your-income', 'Your car, your income'],
+  ],
+};
+
+const kds = {
+  appStore: 'https://apps.apple.com/gh/app/panavest-kds/id6755534884',
+  site: 'https://panavestkds.com',
+};
 
 const featured = [
   {
-    n: '01',
     name: 'SCMpedia',
     role: 'Reference · Knowledge platform',
     tagline:
@@ -101,7 +86,6 @@ const featured = [
     year: '2026',
   },
   {
-    n: '02',
     name: 'HumanClarity AI',
     role: 'AI tool · Consumer SaaS',
     tagline:
@@ -111,17 +95,6 @@ const featured = [
     year: '2026',
   },
   {
-    n: '03',
-    name: 'PanAvest KDS',
-    role: 'Learning platform · Web + iOS',
-    tagline:
-      'A learning system for assessments, e-books, and verifiable certificates. Web platform and a native iOS app, both live.',
-    href: 'https://panavestkds.com',
-    stack: ['React', 'Capacitor', 'iOS'],
-    year: '2025',
-  },
-  {
-    n: '04',
     name: 'Opsara',
     role: 'Industrial SaaS · B2B',
     tagline:
@@ -131,17 +104,6 @@ const featured = [
     year: '2026',
   },
   {
-    n: '05',
-    name: 'Hayame',
-    role: 'Founder · Mobility',
-    tagline:
-      'Car rental, sale, and logistics in Ghana. Built from a blank canvas into a working business.',
-    href: 'https://www.hayamegh.com',
-    stack: ['Founder', 'Web', 'Strategy'],
-    year: '2023 →',
-  },
-  {
-    n: '06',
     name: 'Jano Hospital',
     role: 'Healthcare · Management System',
     tagline:
@@ -153,6 +115,7 @@ const featured = [
 ];
 
 const projects = [
+  { name: 'FERN', link: 'https://hospital-ref.vercel.app/', tag: 'Hospital referrals', live: true },
   { name: 'KudiDash', link: 'https://kudidash.vercel.app/', tag: 'Accounting SaaS', live: true },
   { name: 'Wusu Humanizer', link: 'https://wusu-humanizer-one.vercel.app/', tag: 'AI tool', live: true },
   { name: 'PassportSnap', link: 'https://quickpass-lyart.vercel.app/', tag: 'Utility', live: true },
@@ -164,13 +127,15 @@ const projects = [
 ];
 
 const companies = [
-  'PanAvest International',
+  'PanAvest International & Partners',
+  'Boardroom Governance Summit',
   'MYO Global',
   'NyansaKasa',
   'Gennaio Naturals',
   'Hayame',
   'Leti Arts',
   'CEM New York',
+  'Chequer Automotive',
   'Ashesi University',
   'Infinix Mobile',
   'Transsion Holdings',
@@ -178,10 +143,18 @@ const companies = [
 
 const experience = [
   {
-    role: 'Web Developer · Marketing · Designer',
-    company: 'PanAvest International',
+    role: 'Senior Associate Software Engineer · Full Stack & Digital Systems',
+    company: 'PanAvest International & Partners',
     span: '2025 — Now',
-    detail: 'Web and app products across the PanAvest ecosystem.',
+    detail:
+      'Web, app and event systems across the PanAvest group — the KDS learning platform, the Boardroom Governance Summit, MYO and NyansaKasa. Accra and Johannesburg.',
+  },
+  {
+    role: 'Creative & digital lead',
+    company: 'Boardroom Governance Summit 2026',
+    span: '2026',
+    detail:
+      'Event branding and print, speaker and panel screens, digital pull-up content, social media and the website, and coordination with the printers, the AV team and the organisers. Also built the organising team’s planning dashboard.',
   },
   {
     role: 'Web Developer · Marketing · Designer',
@@ -205,7 +178,8 @@ const experience = [
     role: 'Founder',
     company: 'Hayame',
     span: '2023 — Now',
-    detail: 'Car rental, sale, and logistics — strategy and tech.',
+    detail:
+      'Started as car rental, sale and logistics; now a car-sharing marketplace on the web, iOS and Android.',
   },
   {
     role: 'Lead Web Manager',
@@ -239,6 +213,35 @@ const experience = [
   },
 ];
 
+const organisations = [
+  {
+    name: 'PanAvest International & Partners',
+    kind: 'The firm',
+    body: 'Supply-chain advisory with offices in Accra and Johannesburg. I’m the Senior Associate Software Engineer — full stack and digital systems.',
+    href: 'https://www.panavest.com/',
+    site: 'panavest.com',
+  },
+  {
+    name: 'Boardroom Governance Summit',
+    kind: 'Annual summit',
+    body: 'Board chairs, directors and regulators in one room in Accra, once a year. I led the creative and digital side of the 2026 edition.',
+    href: 'https://boardroomgovsummit.com/',
+    site: 'boardroomgovsummit.com',
+  },
+  {
+    name: 'My Future, Your Future, Our Future',
+    kind: 'MYO · Non-profit',
+    body: 'A youth-focused organisation building the future we want, starting with Africa. Web, design and digital outreach.',
+    href: 'https://myoglobal.org/',
+    site: 'myoglobal.org',
+  },
+  {
+    name: 'NyansaKasa',
+    kind: 'Words of wisdom',
+    body: 'Akan for “words of wisdom” — a platform for the mindset the continent’s future needs. Digital presence and design.',
+  },
+];
+
 const education = [
   {
     school: 'University of Professional Studies, Accra',
@@ -269,10 +272,10 @@ const education = [
 
 const capabilities = [
   { title: 'Full-stack web', body: 'React, modern build tooling, and a habit of shipping.' },
-  { title: 'Mobile', body: 'iOS apps with React + Capacitor — App Store deployments, not prototypes.' },
+  { title: 'Mobile', body: 'iOS and Android apps — App Store deployments, not prototypes.' },
   { title: 'Desktop', body: 'Cross-platform desktop apps where the web doesn’t quite reach.' },
   { title: 'Digital strategy', body: 'Brand systems, growth motions, and the operational glue.' },
-  { title: 'Design', body: 'UI, identity, and the small decisions that decide whether a product feels considered.' },
+  { title: 'Design', body: 'UI, identity, print and motion — from an app screen to a 44-foot stage backdrop.' },
   { title: 'Ownership', body: 'Founder, partner, lead — comfortable holding the whole thing, not just a slice.' },
 ];
 
@@ -282,41 +285,46 @@ const socials = [
   { name: 'Facebook', icon: Facebook, url: 'https://www.facebook.com/p/Kennedyabubakar-61560112862267/' },
 ];
 
-const sectionIds = ['top', 'work', 'about', 'trajectory', 'contact'];
+// Every tracked section, in document order — the active-section tracker depends
+// on the order. Only the ones with a name appear in the nav; the rest exist so
+// the pill un-highlights while you read them.
+const sectionIds = ['top', 'about', 'summit', 'apps', 'work', 'design', 'trajectory', 'contact'];
 const sectionNames = {
   top: 'Intro',
-  work: 'Work',
   about: 'About',
-  trajectory: 'Path',
+  summit: 'Summit',
+  apps: 'Apps',
+  work: 'Work',
+  design: 'Design',
   contact: 'Contact',
 };
 
 // ---------- App ----------
 
 export default function App() {
+  useHashScroll();
   const time = useAccraTime();
   const active = useActiveSection(sectionIds);
 
   return (
     <div className="relative">
+      <div className="botanicals" aria-hidden="true" />
       <ScrollProgress />
 
       {/* Floating nav */}
       <nav className="nav-pill" aria-label="Primary">
-        {sectionIds.map((id) => (
-          <a
-            key={id}
-            href={`#${id}`}
-            className={active === id ? 'active' : ''}
-          >
-            {sectionNames[id]}
-          </a>
-        ))}
+        {sectionIds
+          .filter((id) => sectionNames[id])
+          .map((id) => (
+            <a key={id} href={`#${id}`} className={active === id ? 'active' : ''}>
+              {sectionNames[id]}
+            </a>
+          ))}
       </nav>
 
-      <main className="px-5 md:px-10 lg:px-16 max-w-[1240px] mx-auto">
+      <main className="page px-5 md:px-10 lg:px-16 max-w-[1240px] mx-auto">
         {/* ---- HERO ---- */}
-        <section id="top" className="min-h-screen flex flex-col justify-center pt-32 pb-20">
+        <section id="top" className="min-h-screen flex flex-col justify-center pt-32 pb-16">
           <div className="grid grid-cols-1 lg:grid-cols-[1.3fr_1fr] gap-12 lg:gap-20 items-center">
             <div>
               <Reveal>
@@ -338,8 +346,9 @@ export default function App() {
 
               <Reveal delay={180}>
                 <p className="mt-8 text-lg md:text-xl text-[var(--ink-soft)] leading-relaxed max-w-xl">
-                  Full-stack developer and founder. I design and build calm, considered
-                  software — web, mobile, and desktop — from Accra, for the world.
+                  Senior Associate Software Engineer at PanAvest International &amp;
+                  Partners, and a founder. I design and build calm, considered software —
+                  and the brands, stages and films around it — from Accra, for the world.
                 </p>
               </Reveal>
 
@@ -348,6 +357,9 @@ export default function App() {
                   <a href="#work" className="btn btn-primary">
                     See selected work <ArrowUpRight size={16} />
                   </a>
+                  <a href="/scrapbook/" className="btn btn-ghost">
+                    Design scrapbook <ArrowUpRight size={16} />
+                  </a>
                   <a href="mailto:kennedyabu85@gmail.com" className="btn btn-ghost">
                     <Mail size={15} /> Get in touch
                   </a>
@@ -355,18 +367,28 @@ export default function App() {
               </Reveal>
 
               <Reveal delay={400}>
-                <div className="mt-12 flex flex-wrap gap-x-8 gap-y-3 eyebrow">
-                  <span>BSc IT</span>
-                  <span>MBA in progress · UPSA</span>
-                  <span>MIIPGH · MIAENG</span>
-                </div>
+                <dl className="hero-meta">
+                  <div>
+                    <dt className="eyebrow">Now</dt>
+                    <dd>Full stack &amp; digital systems</dd>
+                  </div>
+                  <div>
+                    <dt className="eyebrow">Based</dt>
+                    <dd>Accra, Ghana</dd>
+                  </div>
+                  <div>
+                    <dt className="eyebrow">Credentials</dt>
+                    <dd>BSc IT · MIIPGH · MIAENG</dd>
+                  </div>
+                </dl>
               </Reveal>
             </div>
 
             <Reveal delay={150}>
               <div className="relative max-w-md mx-auto lg:ml-auto lg:mr-0">
-                <div className="portrait-halo" aria-hidden="true" />
-                <div className="portrait">
+                <span className="orb orb-a" aria-hidden="true" />
+                <span className="orb orb-b" aria-hidden="true" />
+                <div className="portrait portrait-arch">
                   <img src="/portrait.png" alt="Kennedy Abubakar" />
                 </div>
               </div>
@@ -374,22 +396,28 @@ export default function App() {
           </div>
         </section>
 
+        {/* ---- Stats ---- */}
+        <section aria-label="In numbers">
+          <Reveal>
+            <dl className="stats">
+              {stats.map((s) => (
+                <div key={s.label}>
+                  <dt>{s.label}</dt>
+                  <dd className="metric">{s.value}</dd>
+                </div>
+              ))}
+            </dl>
+          </Reveal>
+        </section>
+
         {/* ---- Marquee ---- */}
-        <section className="py-10 md:py-14 overflow-hidden">
+        <section className="pt-16 pb-6 md:pt-20 overflow-hidden">
           <Reveal>
             <p className="eyebrow text-center mb-6">
               People and organisations I’ve worked with
             </p>
           </Reveal>
-          <div className="relative overflow-hidden">
-            <div
-              className="absolute inset-y-0 left-0 w-24 z-10 pointer-events-none"
-              style={{ background: 'linear-gradient(to right, var(--bg), transparent)' }}
-            />
-            <div
-              className="absolute inset-y-0 right-0 w-24 z-10 pointer-events-none"
-              style={{ background: 'linear-gradient(to left, var(--bg), transparent)' }}
-            />
+          <div className="marquee-mask">
             <div className="marquee">
               {[...companies, ...companies].map((c, i) => (
                 <span
@@ -404,12 +432,12 @@ export default function App() {
           </div>
         </section>
 
-        {/* ---- About / Currently ---- */}
+        {/* ---- About ---- */}
         <section id="about" className="section">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
             <div className="lg:col-span-4">
               <Reveal>
-                <p className="eyebrow mb-3">About</p>
+                <p className="eyebrow mark mb-3">About</p>
               </Reveal>
               <Reveal delay={60}>
                 <h2 className="font-display text-3xl md:text-4xl leading-[1.05]">
@@ -422,7 +450,8 @@ export default function App() {
                 <p>
                   I write code, run companies, and design the small things between them.
                   Most of my work lives in Ghana but reaches further — apps on the App Store,
-                  e-commerce in New York, learning platforms used by Pan-African educators.
+                  e-commerce in New York, learning platforms used by Pan-African educators,
+                  and a governance summit that convenes in Accra every year.
                 </p>
               </Reveal>
               <Reveal delay={200}>
@@ -432,25 +461,235 @@ export default function App() {
                   and prefer one well-made thing over ten half-made ones.
                 </p>
               </Reveal>
+            </div>
+          </div>
+        </section>
 
-              <Reveal delay={280}>
-                <div className="grid grid-cols-3 gap-6 pt-8 mt-6 border-t border-[var(--line)]">
-                  <div>
-                    <p className="metric">15+</p>
-                    <p className="eyebrow mt-2">Shipped products</p>
-                  </div>
-                  <div>
-                    <p className="metric">3</p>
-                    <p className="eyebrow mt-2">Continents</p>
-                  </div>
-                  <div>
-                    <p className="metric">1</p>
-                    <p className="eyebrow mt-2">App Store app</p>
-                  </div>
+        {/* ---- Organisations ---- */}
+        <section className="section pt-0">
+          <div className="flex flex-wrap items-baseline justify-between gap-4 mb-10">
+            <Reveal>
+              <div>
+                <p className="eyebrow mark mb-3">Day job</p>
+                <h2 className="font-display text-3xl md:text-4xl max-w-2xl leading-[1.05]">
+                  One firm, and the organisations around it.
+                </h2>
+              </div>
+            </Reveal>
+            <Reveal delay={80}>
+              <span className="eyebrow">Accra · Johannesburg</span>
+            </Reveal>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {organisations.map((o, i) => {
+              const inner = (
+                <>
+                  <p className="eyebrow">{o.kind}</p>
+                  <h3 className="font-display text-xl md:text-2xl mt-3 leading-tight">{o.name}</h3>
+                  <p className="text-[var(--ink-soft)] text-sm md:text-base leading-relaxed mt-3">
+                    {o.body}
+                  </p>
+                  {o.href && (
+                    <p className="eyebrow mt-auto pt-6 flex items-center gap-1.5 text-[var(--emerald)]">
+                      {o.site} <ArrowUpRight size={13} />
+                    </p>
+                  )}
+                </>
+              );
+              return (
+                <Reveal key={o.name} delay={i * 50}>
+                  {o.href ? (
+                    <a
+                      href={o.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="card p-6 md:p-7 h-full flex flex-col"
+                    >
+                      {inner}
+                    </a>
+                  ) : (
+                    <div className="card p-6 md:p-7 h-full flex flex-col">{inner}</div>
+                  )}
+                </Reveal>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* ---- Summit band ---- */}
+        <section id="summit" className="band">
+          <div className="band-plants" aria-hidden="true" />
+          <div className="band-inner px-5 md:px-10 lg:px-16 max-w-[1240px] mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-end">
+              <div className="lg:col-span-7">
+                <Reveal>
+                  <p className="eyebrow mark mb-5">BGS 2026 in review</p>
+                </Reveal>
+                <Reveal delay={60}>
+                  <h2 className="font-display text-4xl md:text-6xl leading-[0.98]">
+                    I led the creative and digital side of the summit.
+                  </h2>
+                </Reveal>
+              </div>
+              <div className="lg:col-span-5">
+                <Reveal delay={120}>
+                  <p className="band-lead">
+                    The Boardroom Governance Summit 2026 — 12 November, Labadi Beach Hotel,
+                    Accra. Africa’s board chairs, directors and regulators in one room, and
+                    everything they looked at that day.
+                  </p>
+                </Reveal>
+              </div>
+            </div>
+
+            <Reveal delay={160}>
+              <ol className="steps">
+                {summit.map((s, i) => (
+                  <li key={s.title}>
+                    <span className="steps-n">{String(i + 1).padStart(2, '0')}</span>
+                    <h3>{s.title}</h3>
+                    <p>{s.body}</p>
+                  </li>
+                ))}
+              </ol>
+            </Reveal>
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5 mt-10 md:mt-12">
+              {summitTiles.map((t, i) => (
+                <Reveal key={t.slug} delay={i * 60}>
+                  <a href="/scrapbook/#summit" className="teaser-tile">
+                    <img
+                      src={`/scrapbook/${t.slug}-thumb.webp`}
+                      alt=""
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    <span>{t.label}</span>
+                  </a>
+                </Reveal>
+              ))}
+            </div>
+
+            <Reveal delay={120}>
+              <div className="mt-10 flex flex-wrap gap-3">
+                <a href="/scrapbook/#summit" className="btn btn-light">
+                  See all the summit designs <ArrowUpRight size={16} />
+                </a>
+                <a
+                  href="https://boardroomgovsummit.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-outline-light"
+                >
+                  boardroomgovsummit.com <ArrowUpRight size={16} />
+                </a>
+              </div>
+            </Reveal>
+          </div>
+        </section>
+
+        {/* ---- Apps ---- */}
+        <section id="apps" className="section">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+            <div className="lg:col-span-4 lg:sticky lg:top-28">
+              <Reveal>
+                <p className="eyebrow mark mb-5">Pet project · iOS · Android · Web</p>
+              </Reveal>
+              <Reveal delay={60}>
+                <h2 className="font-display text-4xl md:text-5xl leading-[1] flex items-center gap-4">
+                  <img
+                    src="/apps/hayame-icon.webp"
+                    alt=""
+                    width="56"
+                    height="56"
+                    className="app-icon"
+                  />
+                  Hayame
+                </h2>
+              </Reveal>
+              <Reveal delay={120}>
+                <p className="mt-6 text-[var(--ink-soft)] text-lg leading-relaxed">
+                  Ghana’s car-sharing marketplace: rent a car from someone down the road,
+                  or put your own car to work. I founded it, and I design and build all of
+                  it — the web platform and the iOS and Android apps.
+                </p>
+              </Reveal>
+              <Reveal delay={180}>
+                <div className="mt-8 flex flex-wrap gap-3">
+                  <a
+                    href={hayame.appStore}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn-primary"
+                  >
+                    App Store <ArrowUpRight size={16} />
+                  </a>
+                  <a href={hayame.apk} className="btn btn-ghost">
+                    <Download size={15} /> Android APK
+                  </a>
+                  <a
+                    href={hayame.site}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn-ghost"
+                  >
+                    hayamegh.com <ArrowUpRight size={16} />
+                  </a>
                 </div>
               </Reveal>
             </div>
+
+            <div className="lg:col-span-8 min-w-0">
+              <Reveal delay={100}>
+                <ul className="shots" aria-label="Hayame app screenshots" tabIndex={0}>
+                  {hayame.shots.map(([file, label]) => (
+                    <li key={file}>
+                      <img
+                        src={`/apps/hayame-${file}.webp`}
+                        width="660"
+                        height="1434"
+                        alt={`Hayame app — ${label}`}
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    </li>
+                  ))}
+                </ul>
+                <p className="eyebrow mt-4">Scroll sideways · the screens on the App Store listing</p>
+              </Reveal>
+            </div>
           </div>
+
+          <Reveal delay={80}>
+            <div className="card mt-14 p-6 md:p-10 grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-10 items-center">
+              <div className="md:col-span-8">
+                <p className="eyebrow">Also in the App Store · Learning platform · Web + iOS</p>
+                <h3 className="font-display text-3xl md:text-4xl mt-3">PanAvest KDS</h3>
+                <p className="mt-4 text-[var(--ink-soft)] text-base md:text-lg leading-relaxed max-w-2xl">
+                  The Knowledge Development Series as a learning system: assessments,
+                  e-books, and verifiable certificates. Web platform and iOS app, both live.
+                </p>
+              </div>
+              <div className="md:col-span-4 flex flex-wrap gap-3 md:justify-end">
+                <a
+                  href={kds.appStore}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-primary"
+                >
+                  App Store <ArrowUpRight size={16} />
+                </a>
+                <a
+                  href={kds.site}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-ghost"
+                >
+                  panavestkds.com <ArrowUpRight size={16} />
+                </a>
+              </div>
+            </div>
+          </Reveal>
         </section>
 
         {/* ---- Selected Work ---- */}
@@ -458,7 +697,7 @@ export default function App() {
           <div className="flex items-baseline justify-between mb-10 md:mb-14">
             <Reveal>
               <div>
-                <p className="eyebrow mb-3">Selected work</p>
+                <p className="eyebrow mark mb-3">Selected work</p>
                 <h2 className="font-display text-3xl md:text-4xl">
                   A few things I’m proud of.
                 </h2>
@@ -473,7 +712,7 @@ export default function App() {
 
           <div className="grid grid-cols-1 gap-5 md:gap-6">
             {featured.map((p, i) => (
-              <Reveal key={p.n} delay={i * 60}>
+              <Reveal key={p.name} delay={i * 60}>
                 <a
                   href={p.href}
                   target="_blank"
@@ -481,7 +720,7 @@ export default function App() {
                   className="card block p-6 md:p-10 group"
                 >
                   <div className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-10 items-start">
-                    <div className="md:col-span-1 eyebrow">{p.n}</div>
+                    <div className="md:col-span-1 eyebrow">{String(i + 1).padStart(2, '0')}</div>
                     <div className="md:col-span-7">
                       <h3 className="font-display text-3xl md:text-4xl leading-tight">
                         {p.name}
@@ -550,29 +789,61 @@ export default function App() {
           </div>
         </section>
 
+        {/* ---- Design & motion ---- */}
+        <section id="design" className="section">
+          <div className="flex flex-wrap items-end justify-between gap-6 mb-10 md:mb-14">
+            <Reveal>
+              <div>
+                <p className="eyebrow mark mb-3">Design &amp; motion</p>
+                <h2 className="font-display text-3xl md:text-4xl max-w-2xl leading-[1.05]">
+                  The half that isn’t code: flyers, brands, logos, film.
+                </h2>
+              </div>
+            </Reveal>
+            <Reveal delay={80}>
+              <a href="/scrapbook/" className="btn btn-primary">
+                Open the scrapbook <ArrowUpRight size={16} />
+              </a>
+            </Reveal>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5">
+            {teaser.map((t, i) => (
+              <Reveal key={t.slug} delay={i * 60}>
+                <a href={t.to} className="teaser-tile">
+                  <img
+                    src={t.video ? `/scrapbook/video/${t.slug}.webp` : `/scrapbook/${t.slug}-thumb.webp`}
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <span>{t.label}</span>
+                </a>
+              </Reveal>
+            ))}
+          </div>
+        </section>
+
         {/* ---- Capabilities ---- */}
         <section className="section">
           <Reveal>
-            <p className="eyebrow mb-3">Capabilities</p>
+            <p className="eyebrow mark mb-3">Capabilities</p>
           </Reveal>
           <Reveal delay={60}>
             <h2 className="font-display text-3xl md:text-4xl max-w-2xl leading-[1.05] mb-12">
               The full surface area — done quietly, and on time.
             </h2>
           </Reveal>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {capabilities.map((c, i) => (
-              <Reveal key={c.title} delay={i * 50}>
-                <div className="card h-full p-6 md:p-7">
-                  <p className="eyebrow mb-3">{String(i + 1).padStart(2, '0')} / 06</p>
-                  <h4 className="font-display text-xl md:text-2xl mb-2">{c.title}</h4>
-                  <p className="text-[var(--ink-soft)] leading-relaxed text-sm md:text-base">
-                    {c.body}
-                  </p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
+          <Reveal delay={100}>
+            <ol className="steps steps-light">
+              {capabilities.map((c, i) => (
+                <li key={c.title}>
+                  <span className="steps-n">{String(i + 1).padStart(2, '0')}</span>
+                  <h3>{c.title}</h3>
+                  <p>{c.body}</p>
+                </li>
+              ))}
+            </ol>
+          </Reveal>
         </section>
 
         {/* ---- Trajectory ---- */}
@@ -580,7 +851,7 @@ export default function App() {
           <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-8 lg:gap-16">
             <div className="side-meta">
               <Reveal>
-                <p className="eyebrow mb-3">Trajectory</p>
+                <p className="eyebrow mark mb-3">Trajectory</p>
               </Reveal>
               <Reveal delay={60}>
                 <h2 className="font-display text-3xl md:text-4xl leading-[1.05]">
@@ -614,7 +885,7 @@ export default function App() {
         {/* ---- Education ---- */}
         <section className="section">
           <Reveal>
-            <p className="eyebrow mb-3">Foundation</p>
+            <p className="eyebrow mark mb-3">Foundation</p>
           </Reveal>
           <Reveal delay={60}>
             <h2 className="font-display text-3xl md:text-4xl mb-12 max-w-2xl leading-[1.05]">
@@ -647,7 +918,7 @@ export default function App() {
         {/* ---- Contact ---- */}
         <section id="contact" className="section">
           <Reveal>
-            <p className="eyebrow mb-6">Contact</p>
+            <p className="eyebrow mark mb-6">Contact</p>
           </Reveal>
           <Reveal delay={80}>
             <h2 className="font-display text-4xl md:text-6xl lg:text-7xl leading-[0.95] max-w-3xl">
@@ -691,7 +962,7 @@ export default function App() {
           </p>
           <div className="flex items-center gap-4">
             <span>© {new Date().getFullYear()}</span>
-            <span>v 2.1</span>
+            <span>v 3.0</span>
           </div>
         </footer>
       </main>
