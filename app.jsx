@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import { Reveal, ScrollProgress, useActiveSection, useHashScroll } from './reveal.jsx';
 import { summitTiles, teaser } from './scrapbook-data.js';
+import { institutions, media } from './partners-data.js';
 
 // ---------- Hooks ----------
 
@@ -26,6 +27,43 @@ function useAccraTime() {
   }).format(now);
   return time;
 }
+
+// ---------- Logo wall ----------
+
+// Every logo is painted in one colour through an alpha mask, and sized by area
+// rather than by box so a round crest and a long wordmark carry the same weight.
+function LogoWall({ items, className = '' }) {
+  return (
+    <ul className={`logo-wall ${className}`}>
+      {items.map((p) => {
+        let h = Math.min(64, Math.max(30, Math.sqrt(6400 / p.r)));
+        let w = h * p.r;
+        if (w > 150) {
+          w = 150;
+          h = w / p.r;
+        }
+        const url = `url(/partners/${p.slug}.webp)`;
+        return (
+          <li key={p.slug} title={p.name}>
+            <span
+              className="logo-mask"
+              role="img"
+              aria-label={p.name}
+              style={{
+                width: `${w.toFixed(0)}px`,
+                height: `${h.toFixed(0)}px`,
+                WebkitMaskImage: url,
+                maskImage: url,
+              }}
+            />
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
+const names = (items) => items.map((p) => (p.short ? `${p.name} (${p.short})` : p.name)).join(' · ');
 
 // ---------- Data ----------
 
@@ -821,6 +859,48 @@ export default function App() {
               </Reveal>
             ))}
           </div>
+        </section>
+
+        {/* ---- Institutions ---- */}
+        <section id="institutions" className="section">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-16 mb-12 md:mb-16">
+            <div className="lg:col-span-6">
+              <Reveal>
+                <p className="eyebrow mark mb-3">Institutions</p>
+              </Reveal>
+              <Reveal delay={60}>
+                <h2 className="font-display text-3xl md:text-4xl leading-[1.05]">
+                  Institutions I’ve worked with.
+                </h2>
+              </Reveal>
+            </div>
+            <div className="lg:col-span-5 lg:col-start-8">
+              <Reveal delay={120}>
+                <p className="text-[var(--ink-soft)] text-base md:text-lg leading-relaxed">
+                  Regulators, professional bodies, chambers of commerce, continental
+                  institutions and media houses — {institutions.length + media.length} in all.
+                </p>
+              </Reveal>
+            </div>
+          </div>
+
+          <Reveal>
+            <div className="logo-group-head">
+              <h3 className="eyebrow">Institutions &amp; partners</h3>
+              <span className="eyebrow">{institutions.length}</span>
+            </div>
+            <LogoWall items={institutions} />
+            <p className="logo-names">{names(institutions)}</p>
+          </Reveal>
+
+          <Reveal>
+            <div className="logo-group-head mt-14">
+              <h3 className="eyebrow">Media</h3>
+              <span className="eyebrow">{String(media.length).padStart(2, '0')}</span>
+            </div>
+            <LogoWall items={media} className="logo-wall-media" />
+            <p className="logo-names">{names(media)}</p>
+          </Reveal>
         </section>
 
         {/* ---- Capabilities ---- */}

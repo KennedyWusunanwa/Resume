@@ -755,3 +755,57 @@ body {
   background: var(--bg-alt);
   box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 22px 40px -22px rgba(0,0,0,0.3);
 }
+
+/* ---------- Logo wall ---------- */
+
+/* One colour through each logo's alpha mask (see partners-data.js). */
+.logo-group-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.9rem;
+  border-bottom: 1px solid var(--line);
+}
+.logo-wall {
+  list-style: none;
+  margin: 0;
+  padding: 0.75rem 0 0;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+.logo-wall-media { grid-template-columns: repeat(7, minmax(0, 1fr)); }
+.logo-wall li {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 112px;
+  padding: 0 0.6rem;
+}
+.logo-mask {
+  display: block;
+  max-width: 100%;
+  background-color: var(--ink);
+  opacity: 0.68;
+  -webkit-mask: center / contain no-repeat;
+  mask: center / contain no-repeat;
+  transition: opacity 0.35s ease, background-color 0.35s ease;
+}
+.logo-wall li:hover .logo-mask { opacity: 1; background-color: var(--emerald); }
+.logo-names {
+  margin-top: 1.1rem;
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--line);
+  font-size: 0.82rem;
+  line-height: 1.75;
+  color: var(--ink-mute);
+}
+@media (max-width: 1023px) {
+  .logo-wall { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .logo-wall-media { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  .logo-wall { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .logo-wall li { height: 92px; padding: 0 0.35rem; }
+  .logo-mask { transform: scale(0.74); }
+}
